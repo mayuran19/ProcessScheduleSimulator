@@ -1,11 +1,14 @@
 package com.mayuran19.nus.os.simulator;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class SRTFSimulator {
-    public static void main(String[] args) throws IOException {
-        List<Process> processes = Process.getProcesses(args[0]);
+    public static void run(List<Process> processes, File file) throws IOException {
         Process previousExecutedProcess = null;
         while (!isAllProcessesCompleted(processes)) {
             Process processToExecute = Process.getProcessWithMinimumBurstTime(processes);
@@ -16,6 +19,7 @@ public class SRTFSimulator {
             }else{
                 if (previousExecutedProcess == null || !previousExecutedProcess.getProcessId().equals(processToExecute.getProcessId())) {
                     System.out.println("(" + Process.currentTime + "," + processToExecute.getProcessId() + ")");
+                    Files.write(file.toPath(), ("(" + Process.currentTime + "," + processToExecute.getProcessId() + ")" + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
                 }
                 previousExecutedProcess = executeProcess(processToExecute);
             }
@@ -30,7 +34,8 @@ public class SRTFSimulator {
             //System.out.println(process.toString());
         }
 
-        System.out.println("Average wait time: " + (totalWaitTime/totalProcess));
+        System.out.println("average waiting time: " + (totalWaitTime/totalProcess));
+        Files.write(file.toPath(), ("average waiting time: " + (totalWaitTime/totalProcess) + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
     }
 
     public static Process executeProcess(Process process) {

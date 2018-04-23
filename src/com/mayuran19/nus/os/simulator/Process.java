@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Process {
-    public static int currentTime = 0;
+    public static double currentTime = 0;
     private String processId;
-    private int arrivingTime;
-    private int burstTime;
-    private int quantumProcessedTime;
+    private double arrivingTime;
+    private double burstTime;
+    private double quantumProcessedTime;
     private boolean isCompleted;
-    private int waitTime;
-    private int executionTime;
-    private int completionTime;
+    private double waitTime;
+    private double executionTime;
+    private double completionTime;
 
     public String getProcessId() {
         return processId;
@@ -25,27 +25,27 @@ public class Process {
         this.processId = processId;
     }
 
-    public int getArrivingTime() {
+    public double getArrivingTime() {
         return arrivingTime;
     }
 
-    public void setArrivingTime(int arrivingTime) {
+    public void setArrivingTime(double arrivingTime) {
         this.arrivingTime = arrivingTime;
     }
 
-    public int getBurstTime() {
+    public double getBurstTime() {
         return burstTime;
     }
 
-    public void setBurstTime(int burstTime) {
+    public void setBurstTime(double burstTime) {
         this.burstTime = burstTime;
     }
 
-    public int getQuantumProcessedTime() {
+    public double getQuantumProcessedTime() {
         return quantumProcessedTime;
     }
 
-    public void setQuantumProcessedTime(int quantumProcessedTime) {
+    public void setQuantumProcessedTime(double quantumProcessedTime) {
         this.quantumProcessedTime = quantumProcessedTime;
     }
 
@@ -57,27 +57,27 @@ public class Process {
         isCompleted = completed;
     }
 
-    public int getWaitTime() {
+    public double getWaitTime() {
         return waitTime;
     }
 
-    public void setWaitTime(int waitTime) {
+    public void setWaitTime(double waitTime) {
         this.waitTime = waitTime;
     }
 
-    public int getExecutionTime() {
+    public double getExecutionTime() {
         return executionTime;
     }
 
-    public void setExecutionTime(int executionTime) {
+    public void setExecutionTime(double executionTime) {
         this.executionTime = executionTime;
     }
 
-    public int getCompletionTime() {
+    public double getCompletionTime() {
         return completionTime;
     }
 
-    public void setCompletionTime(int completionTime) {
+    public void setCompletionTime(double completionTime) {
         this.completionTime = completionTime;
     }
 

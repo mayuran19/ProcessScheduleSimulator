@@ -1,22 +1,23 @@
 package com.mayuran19.nus.os.simulator;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class RRSimulator {
-    public static void main(String args[]) throws IOException {
-        List<Process> processes = Process.getProcesses(args[0]);
+
+    public static void run(List<Process> processes, int quantum, File file){
         Queue<Process> queue = new LinkedList<>();
         processes.forEach(process -> {
             queue.add(process);
         });
-        //RRScheduling(queue);
-        RRSchedule(queue, 4, processes);
+        RRSchedule(queue, quantum, processes, file);
     }
 
-    public static void RRSchedule(Queue<Process> taskQueue, int quantum, List<Process> processes) {
+    public static void RRSchedule(Queue<Process> taskQueue, int quantum, List<Process> processes, File file) {
         Queue<Process> waitQueue = new LinkedList<>();
         waitQueue.add(taskQueue.poll());
         Process previousProcessedTask = null;
@@ -45,7 +46,7 @@ public class RRSimulator {
                 }
             }
         }
-        int totalWaitTime = 0;
+        double totalWaitTime = 0;
         int totalWaitProcess = 0;
         for (Process p : processes) {
             //System.out.println(p.getProcessId() + ": Completion time:" + p.getCompletionTime() + ", arriving time: " + p.getArrivingTime());
@@ -54,7 +55,7 @@ public class RRSimulator {
         }
         //System.out.println("Wait process:" + totalWaitProcess);
         //System.out.println("Wait time:" + totalWaitTime);
-        System.out.println("Average wait time:" + (Double.valueOf(totalWaitTime)/Double.valueOf(totalWaitProcess)));
+        System.out.println("average waiting time:" + (Double.valueOf(totalWaitTime)/Double.valueOf(totalWaitProcess)));
     }
 
     public static Process processTask(Process process, int quantum, Queue<Process> queue, Process previousProcessedTask) {
