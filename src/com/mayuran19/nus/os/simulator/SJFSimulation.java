@@ -2,12 +2,14 @@ package com.mayuran19.nus.os.simulator;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SJFSimulation {
-    public static void run(List<Process> processes, File file){
+    public static void run(List<Process> processes, File file) throws IOException {
         Map<String, BurstTime> burstMap = new HashMap<>();
 
         Process previousExecutedProcess = null;
@@ -20,6 +22,7 @@ public class SJFSimulation {
             }else {
                 if (previousExecutedProcess == null || !previousExecutedProcess.getProcessId().equals(processToExecute.getProcessId())) {
                     System.out.println("(" + Process.currentTime + "," + processToExecute.getProcessId() + ")");
+                    Files.write(file.toPath(), ("(" + Process.currentTime + "," + processToExecute.getProcessId() + ")" + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
                 }
                 previousExecutedProcess = executeProcess(processToExecute, burstMap);
             }
@@ -35,6 +38,7 @@ public class SJFSimulation {
         }
 
         System.out.println("average waiting time: " + (totalWaitTime/totalProcess));
+        Files.write(file.toPath(), ("average waiting time: " + (totalWaitTime/totalProcess) + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
     }
 
     public static Process executeProcess(Process process, Map<String, BurstTime> burstMap){
