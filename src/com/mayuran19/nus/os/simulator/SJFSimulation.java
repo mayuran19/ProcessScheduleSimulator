@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SJFSimulation {
-    public static void run(List<Process> processes, File file) throws IOException {
+    public static void run(List<Process> processes, double alpha, File file) throws IOException {
         Map<String, BurstTime> burstMap = new HashMap<>();
 
         Process previousExecutedProcess = null;
@@ -24,7 +24,7 @@ public class SJFSimulation {
                     System.out.println("(" + Process.currentTime + "," + processToExecute.getProcessId() + ")");
                     Files.write(file.toPath(), ("(" + Process.currentTime + "," + processToExecute.getProcessId() + ")" + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
                 }
-                previousExecutedProcess = executeProcess(processToExecute, burstMap);
+                previousExecutedProcess = executeProcess(processToExecute, burstMap, alpha);
             }
         }
 
@@ -41,12 +41,12 @@ public class SJFSimulation {
         Files.write(file.toPath(), ("average waiting time: " + (totalWaitTime/totalProcess) + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
     }
 
-    public static Process executeProcess(Process process, Map<String, BurstTime> burstMap){
+    public static Process executeProcess(Process process, Map<String, BurstTime> burstMap, double alpha){
         double currentBurstTime = process.getBurstTime();
         if(burstMap.get(process.getProcessId()) != null){
             //
             BurstTime burstTimeObj = burstMap.get(process.getProcessId());
-            double predictedBurstTime = 0.5 * burstTimeObj.getPreviousBurstTime() + (1 - 0.5) * burstTimeObj.getPreviousPredictedBurstTime();
+            double predictedBurstTime = alpha * burstTimeObj.getPreviousBurstTime() + (1 - alpha) * burstTimeObj.getPreviousPredictedBurstTime();
 
             if(currentBurstTime > predictedBurstTime){
                 process.setBurstTime(currentBurstTime - predictedBurstTime);
@@ -58,6 +58,9 @@ public class SJFSimulation {
             }
             burstTimeObj.setPreviousBurstTime(currentBurstTime);
             burstTimeObj.setPreviousPredictedBurstTime(predictedBurstTime);
+            //System.out.println("Current time:" + Process.currentTime);
+            //System.out.println("Actual burst time:" + currentBurstTime);
+            //System.out.println("predicted burst time:" + predictedBurstTime);
         }else{
             double predictedBurstTime = 5;
             if(currentBurstTime > predictedBurstTime){
@@ -72,8 +75,11 @@ public class SJFSimulation {
             burstTimeObj.setPreviousBurstTime(currentBurstTime);
             burstTimeObj.setPreviousPredictedBurstTime(predictedBurstTime);
             burstMap.put(process.getProcessId(), burstTimeObj);
+            //System.out.println("Current time:" + Process.currentTime);
+            //System.out.println("Actual burst time:" + currentBurstTime);
+            //System.out.println("predicted burst time:" + predictedBurstTime);
         }
-
+        //System.out.println("=================================");
         return process;
     }
 

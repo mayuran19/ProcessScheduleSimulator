@@ -39,7 +39,7 @@ public class Simulation {
         Path sjfOutputPath = Paths.get(Paths.get(args[0]).getParent().toString(), "SJF.txt");
         Files.write(sjfOutputPath, "".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         System.out.println("simulating SJF ----");
-        SJFSimulation.run(processes, sjfOutputPath.toFile());
+        SJFSimulation.run(processes, 0.5, sjfOutputPath.toFile());
         System.out.println();
     }
 }
