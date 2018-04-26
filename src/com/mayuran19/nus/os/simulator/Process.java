@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Process {
     public static double currentTime = 0;
@@ -16,6 +17,7 @@ public class Process {
     private double waitTime;
     private double executionTime;
     private double completionTime;
+    private double predictedBurstTime;
 
     public String getProcessId() {
         return processId;
@@ -81,6 +83,14 @@ public class Process {
         this.completionTime = completionTime;
     }
 
+    public double getPredictedBurstTime() {
+        return predictedBurstTime;
+    }
+
+    public void setPredictedBurstTime(double predictedBurstTime) {
+        this.predictedBurstTime = predictedBurstTime;
+    }
+
     @Override
     public String toString() {
         return "Process{" +
@@ -122,6 +132,30 @@ public class Process {
                         mininumBurstTimeProcess = process;
                     } else {
                         if (process.getBurstTime() < mininumBurstTimeProcess.getBurstTime()) {
+                            mininumBurstTimeProcess = process;
+                        }
+                    }
+                }
+            }
+        }
+
+        return mininumBurstTimeProcess;
+    }
+
+    public static Process getProcessWithMinimumPredictedBurstTime(List<Process> processes, Map<String, Double> map) {
+        Process mininumBurstTimeProcess = null;
+        for (Process process : processes) {
+            if (process.getArrivingTime() > Process.currentTime) {
+                break;
+            } else {
+                if(map.get(process.getProcessId()) ==  null){
+                    map.put(process.getProcessId(), 5d);
+                }
+                if (process.getBurstTime() > 0) {
+                    if (mininumBurstTimeProcess == null) {
+                        mininumBurstTimeProcess = process;
+                    } else {
+                        if (map.get(process.getProcessId()) < map.get(mininumBurstTimeProcess.getProcessId())) {
                             mininumBurstTimeProcess = process;
                         }
                     }
