@@ -16,14 +16,18 @@ public class Simulation {
         });
         System.out.println();
 
-
-
-        Process.currentTime = 0;
-        processes = Process.getProcesses(args[0]);
         Path rrOutputPath = Paths.get(Paths.get(args[0]).getParent().toString(), "RR.txt");
         Files.write(rrOutputPath, "".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        System.out.println("simulating RR ----");
-        RRSimulator.run(processes, 2, rrOutputPath.toFile());
+        for(int i = 1; i < 50; i++){
+            Process.currentTime = 0;
+            processes = Process.getProcesses(args[0]);
+            System.out.println("simulating RR ----");
+            System.out.println("Running for quantum: " + i);
+            RRSimulator.run(processes, i, rrOutputPath.toFile());
+            System.out.println();
+        }
+        System.out.println("end RR");
+        //RRSimulator.run(processes, 8, rrOutputPath.toFile());
         System.out.println();
 
         Process.currentTime = 0;
@@ -34,12 +38,16 @@ public class Simulation {
         SRTFSimulator.run(processes, srtfOutputPath.toFile());
         System.out.println();
 
-        Process.currentTime = 0;
-        processes = Process.getProcesses(args[0]);
         Path sjfOutputPath = Paths.get(Paths.get(args[0]).getParent().toString(), "SJF.txt");
         Files.write(sjfOutputPath, "".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        System.out.println("simulating SJF ----");
-        SJFSimulation.run(processes, 0.5, sjfOutputPath.toFile());
+        for(double i = 0; i <=1; i = i + 0.1){
+            Process.currentTime = 0;
+            processes = Process.getProcesses(args[0]);
+            System.out.println("simulating SJF ----");
+            System.out.println("For alpha: " + i);
+            SJFSimulation.run(processes, i, sjfOutputPath.toFile());
+            System.out.println();
+        }
         System.out.println();
     }
 }
